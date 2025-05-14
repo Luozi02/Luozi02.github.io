@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>禁漫天堂小站</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* 基础重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Lora', serif;
+        }
+
+        /* 头部样式 */
+        header {
+            background-color: #f9f9f9;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 0;
+            border-bottom: 2px solid #eaeaea;
+            z-index: 1000;
+        }
+
+        .header-container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-logo h1 {
+            font-size: 1.8em;
+            color: #e9ae26;
+        }
+
+        .header-logo a {
+            text-decoration: none;
+            color: inherit;
+            transition: opacity 0.3s;
+        }
+
+        .header-logo a:hover {
+            opacity: 0.8;
+        }
+
+        /* 导航交互增强 */
+        .header-nav ul {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .header-nav li a {
+            color: #333;
+            text-decoration: none;
+            position: relative;
+            padding-bottom: 5px;
+        }
+
+        .header-nav li a::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #e9ae26;
+            transition: width 0.3s;
+        }
+
+        .header-nav li a:hover::after {
+            width: 100%;
+        }
+
+        /* 汉堡菜单样式 */
+        .hamburger-menu {
+            display: none;
+            width: 30px;
+            height: 20px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .hamburger-menu::before,
+        .hamburger-menu::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: #333;
+            transition: transform 0.3s;
+        }
+
+        .hamburger-menu::before {
+            top: 0;
+        }
+
+        .hamburger-menu::after {
+            bottom: 0;
+        }
+
+        /* 移动端导航 */
+        @media (max-width: 768px) {
+            .hamburger-menu {
+                display: block;
+            }
+            .header-nav ul {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: #f9f9f9;
+                padding: 20px;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            }
+            .header-nav.active ul {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+
+        /* 主体内容 */
+        main {
+            padding-top: 80px;
+        }
+
+        /* 轮播区优化 */
+        .content-container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 50px auto;
+            display: flex;
+            gap: 30px;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+
+        .slideshow-container {
+            flex: 1;
+            position: relative;
+            aspect-ratio: 16/9;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        .slideshow-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* 轮播控制按钮 */
+        .prev, .next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.5);
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            z-index: 100;
+        }
+
+        .prev { left: 10px; }
+        .next { right: 10px; }
+
+        /* 轮播指示点 */
+        .slideshow-indicators {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+        }
+
+        .indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .indicator.active {
+            background: #e9ae26;
+        }
+
+        .text-container {
+            flex: 0 0 40%;
+            padding: 20px;
+        }
+
+        .text-container h2 {
+            color: #e9ae26;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        /* 分类区优化 */
+        .category-section {
+            padding: 60px 0;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            padding: 0 5%;
+        }
+
+        .category-card {
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .category-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .category-info {
+            padding: 20px;
+        }
+
+        /* 全屏区优化 */
+        .hero-section {
+            height: 70vh;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('07.png');
+            background-size: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #fff;
+            margin-top: 80px;
+        }
+
+        .hero-content h2 {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        /* 页脚增强 */
+        footer {
+            background: #333;
+            color: #fff;
+            padding: 60px 0;
+            margin-top: 100px;
+        }
+
+        .footer-content {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+
+        .footer-section h3 {
+            color: #e9ae26;
+            margin-bottom: 20px;
+        }
+
+        /* 响应式优化 */
+        @media (max-width: 768px) {
+            .content-container {
+                flex-direction: column;
+            }
+
+            .slideshow-container {
+                aspect-ratio: 4/3;
+            }
+
+            .header-nav ul {
+                gap: 15px;
+            }
+
+            .hero-content h2 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="header-logo">
+                <h1><a href="/">禁漫天堂小站</a></h1>
+                <li><a href="jm关于.html">回家的路</a></li>
+            </div>
+            <nav class="header-nav">
+                <ul>
+                    <li><a href="禁漫小站.html">首页</a></li>
+                    <li><a href="分类.html">分类</a></li>
+                    <li><a href="站长推荐.html">排行榜</a></li>
+                    <li><a href="jm关于.html">关于</a></li>
+                </ul>
+            </nav>
+            <div class="hamburger-menu"></div>
+        </div>
+    </header>
+
+    <main>
+        <!-- 轮播区 -->
+        <section class="content-container">
+            <div class="slideshow-container">
+                <button class="prev">❮</button>
+                <button class="next">❯</button>
+                <div class="slide active">
+                    <img src="1.jpg" alt="推荐内容1" onerror="this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='">
+                </div>
+                <div class="slide">
+                    <img src="3.jpg" alt="推荐内容2" onerror="this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='">
+                </div>
+                <div class="slideshow-indicators"></div>
+            </div>
+            <div class="text-container">
+                <h2>本周精选</h2>
+                <p>每日更新最新最热资源</p>
+                <div class="button-container">
+                    <a href="站长推荐.html" class="cta-button">立即查看</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 分类区 -->
+        <section class="category-section" id="categories">
+            <div class="category-grid">
+                <article class="category-card">
+                    <img src="04.png" alt="汉化作品">
+                    <div class="category-info">
+                        <h3>精品汉化</h3>
+                        <p>专业团队汉化作品</p>
+                    </div>
+                </article>
+                <article class="category-card">
+                    <img src="05.png" alt="排行榜">
+                    <div class="category-info">
+                        <h3>连载更新</h3>
+                        <p>实时更新热门作品</p>
+                    </div>
+                </article>
+                <article class="category-card">
+                    <img src="06.png" alt="同人作品">
+                    <div class="category-info">
+                        <h3>同人专区</h3>
+                        <p>原创同人作品集合</p>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- 全屏区 -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <h2>发现更多精彩</h2>
+                <p>每日更新优质内容</p>
+                <a href="分类.html" class="cta-button">立即访问</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>关于我们</h3>
+                <p>资源分享平台</p>
+                <p>投稿联系：614088435@qq.com</p>
+            </div>
+            <div class="footer-section">
+                <h3>服务条款</h3>
+                <ul>
+                    <li><a href="使用条款.html">使用条款</a></li>
+                    <li><a href="隐私政策.html">隐私政策</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 仅展示修改后的JavaScript部分，其他HTML结构保持不变 -->
+<script>
+    // 绑定汉堡菜单点击事件
+const hamburger = document.querySelector('.hamburger-menu');
+function toggleMenu() {
+    document.querySelector('.header-nav').classList.toggle('active');
+    hamburger.classList.toggle('active'); // 添加动画状态
+}
+hamburger.addEventListener('click', toggleMenu);
+
+// 点击菜单项后自动关闭菜单（移动端）
+document.querySelectorAll('.header-nav li a').forEach(link => {
+    link.addEventListener('click', () => {
+        if (window.innerWidth <= 768) {
+            document.querySelector('.header-nav').classList.remove('active');
+            hamburger.classList.remove('active');
+        }
+    });
+});
+
+    // 轮播逻辑（修复版）
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const indicatorsContainer = document.querySelector('.slideshow-indicators');
+
+    // 初始化指示点
+    function initCarousel() {
+        slides.forEach((slide, index) => {
+            const dot = document.createElement('span');
+            dot.classList.add('indicator');
+            dot.addEventListener('click', () => goToSlide(index));
+            indicatorsContainer.appendChild(dot);
+        });
+        updateIndicators(); // 初始化激活状态
+
+        // 绑定按钮事件
+        document.querySelector('.prev').addEventListener('click', () => goToSlide(currentSlide - 1));
+        document.querySelector('.next').addEventListener('click', nextSlide);
+    }
+
+    function updateIndicators() {
+        document.querySelectorAll('.indicator').forEach((dot, index) => {
+            dot.classList.toggle('active', index === currentSlide);
+        });
+    }
+
+    function goToSlide(index) {
+        // 处理边界值
+        if (index < 0) index = slides.length - 1;
+        if (index >= slides.length) index = 0;
+        
+        slides[currentSlide].classList.remove('active');
+        currentSlide = index;
+        slides[currentSlide].classList.add('active');
+        updateIndicators();
+    }
+
+    function nextSlide() {
+        goToSlide(currentSlide + 1);
+    }
+
+    // 初始化轮播
+    document.addEventListener('DOMContentLoaded', initCarousel);
+
+    // 自动播放
+    setInterval(nextSlide, 5000);
+
+    // 汉堡菜单逻辑保持不变...
+</script>
+</body>
+</html>

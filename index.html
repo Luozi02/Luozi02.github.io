@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>禁漫天堂 - 发现精彩世界</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Lora', serif;
+        }
+
+        /* 全屏引导容器 */
+        .guide-container {
+            height: 100vh;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 动态背景粒子 */
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* 内容区域 */
+        .guide-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+        }
+
+        /* 标题样式 */
+        .guide-title {
+            color: #e9ae26;
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            animation: fadeInUp 1s ease;
+        }
+
+        /* 副标题 */
+        .guide-subtitle {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.2em;
+            margin-bottom: 50px;
+            animation: fadeInUp 1s 0.3s ease backwards;
+        }
+
+        /* 功能卡片容器 */
+        .feature-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-bottom: 50px;
+            animation: fadeInUp 1s 0.6s ease backwards;
+        }
+
+        /* 单个卡片 */
+        .feature-card {
+            background: rgba(255,255,255,0.05);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(233,174,38,0.3);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            background: rgba(233,174,38,0.1);
+        }
+
+        .card-icon {
+            font-size: 2.5em;
+            color: #e9ae26;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            color: #fff;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+        }
+
+        .card-description {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+
+        /* 进入按钮 */
+        .enter-button {
+            background: #e9ae26;
+            color: #1a1a1a;
+            padding: 15px 40px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: all 0.3s;
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+
+        .enter-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(233,174,38,0.4);
+        }
+
+        /* 动画效果 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .feature-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .guide-title {
+                font-size: 2.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="guide-container">
+        <!-- 动态粒子背景 -->
+        <canvas class="particles" id="particleCanvas"></canvas>
+        
+        <div class="guide-content">
+            <h1 class="guide-title">禁漫天堂</h1>
+            <p class="guide-subtitle">探索二次元的无限可能</p>
+            
+            <div class="feature-cards">
+                <div class="feature-card">
+                    <div class="card-icon">📚</div>
+                    <h3 class="card-title">海量资源</h3>
+                    <p class="card-description">每日更新精选漫画与同人创作</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="card-icon">🔒</div>
+                    <h3 class="card-title">安全访问</h3>
+                    <p class="card-description">加密传输保障隐私安全</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="card-icon">💾</div>
+                    <h3 class="card-title">找到回家的路</h3>
+                    <p class="card-description">天堂之路</p>
+                </div>
+            </div>
+
+            <a href="禁漫小站.html" class="enter-button">立即进入 →</a>
+        </div>
+    </div>
+
+    <script>
+        // 粒子动画脚本
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.speedX = Math.random() * 3 - 1.5;
+                this.speedY = Math.random() * 3 - 1.5;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
+
+            draw() {
+                ctx.fillStyle = 'rgba(233,174,38,0.5)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function init() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            for (let i = 0; i < 100; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            for (let particle of particles) {
+                particle.update();
+                particle.draw();
+            }
+            
+            requestAnimationFrame(animate);
+        }
+
+        // 初始化
+        window.addEventListener('resize', init);
+        init();
+        animate();
+    </script>
+</body>
+</html>
