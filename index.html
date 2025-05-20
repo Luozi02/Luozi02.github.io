@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>禁漫天堂 - 发现精彩世界</title>
     <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap" rel="stylesheet">
     <style>
@@ -11,55 +11,65 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Lora', serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* 全屏引导容器 */
+        
         .guide-container {
-            height: 100vh;
+            min-height: 100vh;
             background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 20px;
             position: relative;
-            overflow: hidden;
         }
 
-        /* 动态背景粒子 */
+       
+        .scroll-wrapper {
+            position: relative;
+            z-index: 2;
+            height: 100vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+   
         .particles {
-            position: absolute;
+            position: fixed;
             width: 100%;
             height: 100%;
             pointer-events: none;
             z-index: 1;
         }
 
-        /* 内容区域 */
+       
         .guide-content {
             position: relative;
-            z-index: 2;
+            z-index: 3;
             max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
-        /* 标题样式 */
+        
         .guide-title {
             color: #e9ae26;
-            font-size: 3.5em;
+            font-size: clamp(2.5rem, 8vw, 3.5rem);
             margin-bottom: 20px;
             animation: fadeInUp 1s ease;
         }
 
-        /* 副标题 */
+
         .guide-subtitle {
             color: rgba(255,255,255,0.9);
-            font-size: 1.2em;
+            font-size: clamp(1rem, 4vw, 1.2rem);
             margin-bottom: 50px;
             animation: fadeInUp 1s 0.3s ease backwards;
         }
 
-        /* 功能卡片容器 */
+    
         .feature-cards {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -68,13 +78,14 @@
             animation: fadeInUp 1s 0.6s ease backwards;
         }
 
-        /* 单个卡片 */
+        
         .feature-card {
             background: rgba(255,255,255,0.05);
             padding: 30px;
             border-radius: 15px;
             border: 1px solid rgba(233,174,38,0.3);
             transition: all 0.3s;
+            touch-action: manipulation;
         }
 
         .feature-card:hover {
@@ -86,32 +97,48 @@
             font-size: 2.5em;
             color: #e9ae26;
             margin-bottom: 20px;
+            pointer-events: none;
         }
 
         .card-title {
             color: #fff;
-            font-size: 1.3em;
+            font-size: clamp(1.1rem, 4vw, 1.3rem);
             margin-bottom: 15px;
+            pointer-events: none;
         }
 
         .card-description {
             color: rgba(255,255,255,0.7);
-            font-size: 0.9em;
+            font-size: clamp(0.8rem, 3vw, 0.9rem);
             line-height: 1.6;
+            pointer-events: none;
         }
 
-        /* 进入按钮 */
+    
         .enter-button {
             background: #e9ae26;
             color: #1a1a1a;
-            padding: 15px 40px;
+            padding: 20px 50px;
             border-radius: 30px;
             text-decoration: none;
             font-weight: bold;
-            font-size: 1.1em;
+            font-size: clamp(1rem, 4vw, 1.1rem);
             transition: all 0.3s;
             display: inline-block;
             animation: pulse 2s infinite;
+            min-width: 200px;
+            position: relative;
+            touch-action: manipulation;
+            margin-bottom: 100px;
+        }
+
+        .enter-button::after {
+            content: "";
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            right: -15px;
+            bottom: -15px;
         }
 
         .enter-button:hover {
@@ -119,7 +146,7 @@
             box-shadow: 0 0 20px rgba(233,174,38,0.4);
         }
 
-        /* 动画效果 */
+        
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -137,53 +164,90 @@
             100% { transform: scale(1); }
         }
 
-        /* 响应式设计 */
+       
         @media (max-width: 768px) {
             .feature-cards {
                 grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .feature-card {
+                padding: 20px;
+            }
+
+            .enter-button {
+                padding: 15px 40px;
+                min-width: 180px;
+                margin-bottom: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .guide-subtitle {
+                margin-bottom: 30px;
             }
             
-            .guide-title {
-                font-size: 2.5em;
+            .feature-cards {
+                margin-bottom: 30px;
             }
+        }
+
+        
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.1);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(233,174,38,0.6);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(233,174,38,0.8);
         }
     </style>
 </head>
 <body>
     <div class="guide-container">
-        <!-- 动态粒子背景 -->
-        <canvas class="particles" id="particleCanvas"></canvas>
-        
-        <div class="guide-content">
-            <h1 class="guide-title">禁漫天堂</h1>
-            <p class="guide-subtitle">探索二次元的无限可能</p>
+        <div class="scroll-wrapper">
+            <canvas class="particles" id="particleCanvas"></canvas>
             
-            <div class="feature-cards">
-                <div class="feature-card">
-                    <div class="card-icon">📚</div>
-                    <h3 class="card-title">海量资源</h3>
-                    <p class="card-description">每日更新精选漫画与同人创作</p>
-                </div>
+            <div class="guide-content">
+                <h1 class="guide-title">禁漫天堂</h1>
+                <p class="guide-subtitle">探索二次元的无限可能</p>
                 
-                <div class="feature-card">
-                    <div class="card-icon">🔒</div>
-                    <h3 class="card-title">安全访问</h3>
-                    <p class="card-description">加密传输保障隐私安全</p>
+                <div class="feature-cards">
+                    <div class="feature-card">
+                        <div class="card-icon">📚</div>
+                        <h3 class="card-title">海量资源</h3>
+                        <p class="card-description">每日更新精选漫画与同人创作</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="card-icon">🔒</div>
+                        <h3 class="card-title">安全访问</h3>
+                        <p class="card-description">加密传输保障隐私安全</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="card-icon">💾</div>
+                        <h3 class="card-title">离线阅读</h3>
+                        <p class="card-description">支持跨设备同步收藏</p>
+                    </div>
                 </div>
-                
-                <div class="feature-card">
-                    <div class="card-icon">💾</div>
-                    <h3 class="card-title">找到回家的路</h3>
-                    <p class="card-description">天堂之路</p>
-                </div>
-            </div>
 
-            <a href="禁漫小站.html" class="enter-button">立即进入 →</a>
+                <a href="禁漫小站.html" class="enter-button">立即进入 →</a>
+            </div>
         </div>
     </div>
 
     <script>
-        // 粒子动画脚本
+        
         const canvas = document.getElementById('particleCanvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -219,7 +283,8 @@
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             
-            for (let i = 0; i < 100; i++) {
+            particles = [];
+            for (let i = 0; i < 80; i++) {
                 particles.push(new Particle());
             }
         }
@@ -235,10 +300,34 @@
             requestAnimationFrame(animate);
         }
 
-        // 初始化
+        
         window.addEventListener('resize', init);
         init();
         animate();
+
+        
+        const enterButton = document.querySelector('.enter-button');
+        
+        enterButton.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            this.style.transform = 'scale(0.95)';
+        });
+
+        enterButton.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            this.style.transform = '';
+            window.location.href = this.href;
+        });
+
+       
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
     </script>
 </body>
 </html>
